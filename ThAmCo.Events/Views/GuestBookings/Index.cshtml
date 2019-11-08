@@ -31,10 +31,17 @@
                 @Html.DisplayFor(modelItem => item.Customer.Email)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Event.Title)
+                <a asp-area="" asp-route-id="@item.EventId" asp-controller="Events" asp-action="Details">@Html.DisplayFor(modelItem => item.Event.Title)</a>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Attended)
+                @if (item.Attended == true)
+                {
+                    <span>Yes</span>
+                }
+                else
+                {
+                    <span>No</span>
+                }
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="new = item.EventId, CustomerId = item.CustomerId">Edit</a> |
