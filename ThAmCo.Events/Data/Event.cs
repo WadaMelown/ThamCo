@@ -8,16 +8,27 @@ namespace ThAmCo.Events.Data
     {
         public int Id { get; set; }
 
-        [Required]
+        [Required, Display(Name = "Event Name")]
         public string Title { get; set; }
 
         public DateTime Date { get; set; }
 
         public TimeSpan? Duration { get; set; }
 
-        [Required, MaxLength(3), MinLength(3)]
+        [Required, Display(Name = "Event Type")]
         public string TypeId { get; set; }
 
+        [Display(Name = "Guest Bookings")]
         public List<GuestBooking> Bookings { get; set; }
+
+        [Display(Name = "Staff Bookings")]
+        public List<StaffBooking> StaffBookings { get; set; }
+
+        [Display(Name = "Venue Name")]
+        public string VenueCode { get; set; }
+
+        public string id { get; set; }
+
+        public string title { get; set; }
     }
 }
