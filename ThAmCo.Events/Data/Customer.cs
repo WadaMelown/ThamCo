@@ -11,13 +11,13 @@ namespace ThAmCo.Events.Data
         [Required]
         public string Surname { get; set; }
 
-        [Required]
+        [Required, Display(Name = "Forname")]
         public string FirstName { get; set; }
 
-        [Required]
-        [DataType(DataType.EmailAddress)]
+        [Required, Display(Name = "Email Address"), DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
+        [Display(Name = "Guest Bookings")]
         public List<GuestBooking> Bookings { get; set; }
     }
 }

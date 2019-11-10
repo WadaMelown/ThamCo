@@ -30,6 +30,9 @@ namespace ThAmCo.Events.Data
 
             builder.HasDefaultSchema("thamco.events");
 
+            builder.Entity<StaffBooking>()
+                   .HasKey(b => new { b.StaffId, b.EventId });
+
             builder.Entity<GuestBooking>()
                    .HasKey(b => new { b.CustomerId, b.EventId });
 
@@ -38,10 +41,15 @@ namespace ThAmCo.Events.Data
                    .WithOne(b => b.Customer)
                    .HasForeignKey(b => b.CustomerId);
 
+            builder.Entity<StaffInfo>()
+                   .HasMany(c => c.staffBookings)
+                   .WithOne(b => b.StaffInfo)
+                   .HasForeignKey(b => b.StaffId);
+
             builder.Entity<Event>()
-                   .HasMany(e => e.Bookings)
-                   .WithOne(b => b.Event)
-                   .HasForeignKey(b => b.EventId);
+                    .HasMany(e => e.Bookings)
+                    .WithOne(b => b.Event)
+                    .HasForeignKey(b => b.EventId);
 
             builder.Entity<Event>()
                    .Property(e => e.TypeId)
