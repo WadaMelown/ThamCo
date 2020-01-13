@@ -2,6 +2,7 @@
 using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using ThAmCo.Events.Data;
 
 namespace ThAmCo.Events.Data
 {
@@ -44,7 +45,7 @@ namespace ThAmCo.Events.Data
                    .HasForeignKey(b => b.CustomerId);
 
             builder.Entity<StaffInfo>()
-                   .HasMany(c => c.staffBookings)
+                   .HasMany(c => c.StaffBookings)
                    .WithOne(b => b.StaffInfo)
                    .HasForeignKey(b => b.StaffId);
 
@@ -79,5 +80,7 @@ namespace ThAmCo.Events.Data
                 );
             }
         }
+
+        public DbSet<ThAmCo.Events.Data.StaffBooking> StaffBooking { get; set; }
     }
 }
