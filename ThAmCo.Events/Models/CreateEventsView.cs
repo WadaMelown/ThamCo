@@ -25,7 +25,7 @@ namespace ThAmCo.Events.Models
         [Required, Display(Name = "Venue Name")]
         public string VenueCode { get; set; }
 
-        [Required(ErrorMessage = "Make sure you have created at least one staff member before trying to create an event!"), Display(Name = "Staff Name")]
+        [Required(ErrorMessage = "Make sure you have made at least one staff member before trying to create an event!"), Display(Name = "Staff Name")]
         public int StaffId { get; set; }
     }
 }

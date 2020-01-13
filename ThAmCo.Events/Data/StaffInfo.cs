@@ -20,10 +20,10 @@ namespace ThAmCo.Events.Data
         public string Email { get; set; }
 
         [Display(Name = "Staff Bookings")]
-        public List<StaffBooking> staffBookings{get; set;}
+        public List<StaffBooking> StaffBookings{get; set;}
 
-        public string fullName() {
-
+        public string fullName()
+        {
             return FirstName + Surname;
         }
 

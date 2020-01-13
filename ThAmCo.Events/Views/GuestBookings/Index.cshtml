@@ -33,27 +33,20 @@
             <td>
                 <a asp-area="" asp-route-id="@item.EventId" asp-controller="Events" asp-action="Details">@Html.DisplayFor(modelItem => item.Event.Title)</a>
             </td>
-            @*<td>
-            @{                                                          staff.Staff.FirstAider returns that the 'Staff' part is null
-                bool firstAiders = false;
-                foreach (var staff in item.StaffBookings)
-                {
-                    if (staff.Staff.FirstAider == true)
-                    {
-                        firstAiders = true;
-                    }
-                }
-                if (!firstAiders)
-                {
-                    <span style="color: red"><i class="material-icons">warning</i>There are no first aiders assigned to this event!</span>
-                }
-            }
-        </td>*@
             <td>
-                <a asp-action="Edit" asp-route-id="new = item.EventId, CustomerId = item.CustomerId">Edit</a> |
-                <a asp-action="Details" asp-route-id="new = item.EventId, CustomerId = item.CustomerId">Details</a> |
-                <a asp-action="Delete" asp-route-id="new = item.EventId, CustomerId = item.CustomerId">Delete</a>
-                <a asp-action="Events" asp-route-id="new = item.EventId, CustomerId = item.CustomerId">Events</a>
+                @if (item.Attended == true)
+                {
+                    <span>Yes</span>
+                }
+                else
+                {
+                    <span>No</span>
+                }
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.EventId, id2 = item.CustomerId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.EventId, id2 = item.CustomerId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.EventId, id2 = item.CustomerId })
             </td>
         </tr>
 }

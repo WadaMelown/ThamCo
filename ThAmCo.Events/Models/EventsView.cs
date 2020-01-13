@@ -20,9 +20,9 @@ namespace ThAmCo.Events.Models
 
             public string TypeId { get; set; }
 
-            public List<GuestBooking> Booking { get; set; }
+            public List<GuestBooking> Bookings { get; set; }
 
-            public List<StaffBooking> StaffBooking { get; set; }
+            public List<StaffBooking> StaffBookings { get; set; }
 
             public string TypeValue { get; set; }
 
