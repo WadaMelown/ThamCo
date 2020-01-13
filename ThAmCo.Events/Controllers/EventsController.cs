@@ -80,7 +80,7 @@ namespace ThAmCo.Events.Controllers
             var eventTypeInfo = new List<EventDto>().AsEnumerable();
 
             HttpClient client = new HttpClient();
-            client.BaseAddress = new System.Uri("http://localhost:23652/");
+            client.BaseAddress = new System.Uri("http://localhost:22263/");
             client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
 
             HttpResponseMessage response = await client.GetAsync("api/eventtypes");
@@ -96,13 +96,7 @@ namespace ThAmCo.Events.Controllers
 
             ViewData["TypeId"] = new SelectList(eventTypeInfo.ToList(), "id", "title", eventTypeInfo.Select(h => h.id == "CON"));
             ViewData["StaffId"] = new SelectList((from s in _context.Staff
-                                                  select new
-                                                  {
-                                                      Id = s.Id,
-                                                      FullName = s.FirstName + " " + s.Surname
-                                                  }),
-                "Id",
-                "FullName");
+                                                  select new { Id = s.Id, FullName = s.FirstName + " " + s.Surname }), "Id","FullName");
             return View();
         }
 
@@ -136,7 +130,7 @@ namespace ThAmCo.Events.Controllers
                 await _context.SaveChangesAsync();
 
                 HttpClient client = new HttpClient();
-                var response = client.PostAsync("http://localhost:23652/api/Reservations", new StringContent(JsonConvert.SerializeObject(resdto), Encoding.UTF8, "application/json"));
+                var response = client.PostAsync("http://localhost:22263/api/Reservations", new StringContent(JsonConvert.SerializeObject(resdto), Encoding.UTF8, "application/json"));
 
                 Debug.WriteLine(await response.Result.Content.ReadAsStringAsync());
 
@@ -150,7 +144,7 @@ namespace ThAmCo.Events.Controllers
             var eventTypeInfo = new List<Venuedto>().AsEnumerable();
 
             HttpClient client = new HttpClient();
-            client.BaseAddress = new System.Uri("http://localhost:23652/");
+            client.BaseAddress = new System.Uri("http://localhost:22263/");
             client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
 
             HttpResponseMessage response = await client.GetAsync("api/Availability?eventType=" + eventCode + "&beginDate=" + datePassed + "&endDate=" + datePassed);

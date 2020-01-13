@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -73,20 +74,22 @@ namespace ThAmCo.Events.Controllers
         }
 
         // GET: StaffBookings/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, int? id2)
         {
-            if (id == null)
+            if (id == null || id2 == null)
             {
                 return NotFound();
             }
 
-            var staffBooking = await _context.StaffBooking.FindAsync(id);
+            var staffBooking = await _context.StaffBooking
+                .Include(s => s.StaffInfo)
+                .Include(s => s.Event)
+                .Where(e => e.EventId == id)
+                .FirstOrDefaultAsync(m => m.StaffId == id2);
             if (staffBooking == null)
             {
                 return NotFound();
             }
-            ViewData["EventId"] = new SelectList(_context.Events, "Id", "Title", staffBooking.EventId);
-            ViewData["StaffId"] = new SelectList(_context.Staff, "Id", "Email", staffBooking.StaffId);
             return View(staffBooking);
         }
 
@@ -97,26 +100,22 @@ namespace ThAmCo.Events.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("StaffId,EventId")] StaffBooking staffBooking)
         {
-            if (id != staffBooking.StaffId)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-                try
+                if (!StaffBookingExists(staffBooking.StaffId, staffBooking.EventId))
                 {
-                    _context.Update(staffBooking);
+                    _context.Add(staffBooking);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    return null;
+                    Debug.WriteLine("Guest Booking already Exists");
                 }
-                return RedirectToAction(nameof(Index));
             }
+            ViewData["StaffId"] = new SelectList(from s in _context.Staff
+                     select new{ Id = s.Id, FullName = s.FirstName + " " + s.Surname}, "Id", "FullName", staffBooking.StaffId);
             ViewData["EventId"] = new SelectList(_context.Events, "Id", "Title", staffBooking.EventId);
-            ViewData["StaffId"] = new SelectList(_context.Staff, "Id", "Email", staffBooking.StaffId);
             return View(staffBooking);
         }
 
@@ -144,9 +143,9 @@ namespace ThAmCo.Events.Controllers
         // POST: StaffBookings/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id, int? id2)
         {
-            var staffBooking = await _context.StaffBooking.FindAsync(id);
+            var staffBooking = await _context.StaffBooking.FindAsync(id, id2);
             _context.StaffBooking.Remove(staffBooking);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
