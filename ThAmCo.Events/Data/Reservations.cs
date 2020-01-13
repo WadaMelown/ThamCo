@@ -7,6 +7,7 @@ namespace ThAmCo.Events.Data
 {
     public class Reservations
     {
+
         public DateTime EventDate { get; set; }
 
         public string VenueCode { get; set; }

@@ -33,16 +33,22 @@
             <td>
                 <a asp-area="" asp-route-id="@item.EventId" asp-controller="Events" asp-action="Details">@Html.DisplayFor(modelItem => item.Event.Title)</a>
             </td>
-            <td>
-                @if (item.Attended == true)
+            @*<td>
+            @{                                                          staff.Staff.FirstAider returns that the 'Staff' part is null
+                bool firstAiders = false;
+                foreach (var staff in item.StaffBookings)
                 {
-                    <span>Yes</span>
+                    if (staff.Staff.FirstAider == true)
+                    {
+                        firstAiders = true;
+                    }
                 }
-                else
+                if (!firstAiders)
                 {
-                    <span>No</span>
+                    <span style="color: red"><i class="material-icons">warning</i>There are no first aiders assigned to this event!</span>
                 }
-            </td>
+            }
+        </td>*@
             <td>
                 <a asp-action="Edit" asp-route-id="new = item.EventId, CustomerId = item.CustomerId">Edit</a> |
                 <a asp-action="Details" asp-route-id="new = item.EventId, CustomerId = item.CustomerId">Details</a> |

@@ -11,6 +11,8 @@ namespace ThAmCo.Events.Data
         public DbSet<Event> Events { get; set; }
         public DbSet<GuestBooking> Guests { get; set; }
 
+        public DbSet<StaffInfo> Staff { get; set; }
+
         private IHostingEnvironment HostEnv { get; }
 
         public EventsDbContext(DbContextOptions<EventsDbContext> options,

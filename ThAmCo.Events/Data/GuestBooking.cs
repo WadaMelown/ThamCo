@@ -6,11 +6,12 @@ namespace ThAmCo.Events.Data
 {
     public class GuestBooking
     {
-        
+        [Display(Name = "Customer Name")]
         public int CustomerId { get; set; }
 
         public Customer Customer { get; set; }
 
+        [Display(Name = "Event Name")]
         public int EventId { get; set; }
 
         public Event Event { get; set; }
