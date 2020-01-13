@@ -30,6 +30,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.StaffBookings)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TypeId)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -54,6 +57,9 @@
             <td>
                 @Html.DisplayNameFor(model => model.StaffBookings)
             </td>
+            <th>
+                @Html.DisplayNameFor(model => model.TypeId)
+            </th>
             <td>
                 <a asp-action="Index" asp-controller="GuestBookings" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Bookings.Count)</a>
             </td>
