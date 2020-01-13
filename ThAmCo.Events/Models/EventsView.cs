@@ -6,9 +6,9 @@ using ThAmCo.Events.Data;
 
 namespace ThAmCo.Events.Models
 {
-    public class EventsView
+    public class EventsViewModel
     {
-        public class EventsViewModel
+        public class EventsView
         {
             public int Id { get; set; }
 

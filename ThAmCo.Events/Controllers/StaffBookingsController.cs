@@ -49,13 +49,7 @@ namespace ThAmCo.Events.Controllers
         public IActionResult Create()
         {
             ViewData["StaffId"] = new SelectList((from s in _context.Staff
-                select new
-                {
-                  Id = s.Id,
-                  FullName = s.FirstName + " " + s.Surname
-                }),
-                "Id",
-                    "FullName");
+                                                  select new { Id = s.Id, FullName = s.FirstName + " " + s.Surname }), "Id", "FullName");
             ViewData["EventId"] = new SelectList(_context.Events, "Id", "Title");
             return View();
         }
@@ -117,14 +111,7 @@ namespace ThAmCo.Events.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!StaffBookingExists(staffBooking.StaffId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    return null;
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -143,6 +130,7 @@ namespace ThAmCo.Events.Controllers
 
             var staffBooking = await _context.StaffBooking
                 .Include(s => s.Event)
+                .Include(s => s.EventId)
                 .Include(s => s.StaffInfo)
                 .FirstOrDefaultAsync(m => m.StaffId == id);
             if (staffBooking == null)
@@ -164,9 +152,16 @@ namespace ThAmCo.Events.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool StaffBookingExists(int id)
+        private bool StaffBookingExists(int workerid, int eventid)
         {
-            return _context.StaffBooking.Any(e => e.StaffId == id);
+            foreach (StaffBooking booking in _context.StaffBooking)
+            {
+                if (booking.StaffId == workerid && booking.EventId == eventid)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

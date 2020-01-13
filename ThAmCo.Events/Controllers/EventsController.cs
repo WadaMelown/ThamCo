@@ -1,11 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using ThAmCo.Events.Data;
+using ThAmCo.Events.Models;
 
 namespace ThAmCo.Events.Controllers
 {
@@ -21,7 +29,31 @@ namespace ThAmCo.Events.Controllers
         // GET: Events
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Events.ToListAsync());
+            var eventTypeInfo = new List<EventDto>().AsEnumerable();
+
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new System.Uri("http://localhost:22263/");
+            client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
+
+            HttpResponseMessage response = await client.GetAsync("api/eventtypes");
+
+            IQueryable<EventsViewModel> eventGuestsDbContext = _context.Events
+                .Include(g => g.Bookings)
+                .Include(sb => sb.StaffBookings)
+                .Select(g => new EventsViewModel
+                {
+                    Id = g.Id,
+                    Title = g.Title,
+                    Date = g.Date,
+                    Duration = g.Duration,
+                    TypeId = g.TypeId,
+                    Bookings = g.Bookings,
+                    TypeValue = eventTypeInfo.Where(h => h.id == g.TypeId).Select(n => n.title).FirstOrDefault(),
+                    VenueCode = g.VenueCode,
+                    StaffBookings = g.StaffBookings
+                });
+
+            return View(await eventGuestsDbContext.ToListAsync());
         }
 
         // GET: Events/Details/5
@@ -43,8 +75,34 @@ namespace ThAmCo.Events.Controllers
         }
 
         // GET: Events/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var eventTypeInfo = new List<EventDto>().AsEnumerable();
+
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new System.Uri("http://localhost:23652/");
+            client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
+
+            HttpResponseMessage response = await client.GetAsync("api/eventtypes");
+
+            if (response.IsSuccessStatusCode)
+            {
+                eventTypeInfo = await response.Content.ReadAsAsync<IEnumerable<EventDto>>();
+            }
+            else
+            {
+                throw new Exception();
+            }
+
+            ViewData["TypeId"] = new SelectList(eventTypeInfo.ToList(), "id", "title", eventTypeInfo.Select(h => h.id == "CON"));
+            ViewData["StaffId"] = new SelectList((from s in _context.Staff
+                                                  select new
+                                                  {
+                                                      Id = s.Id,
+                                                      FullName = s.FirstName + " " + s.Surname
+                                                  }),
+                "Id",
+                "FullName");
             return View();
         }
 
@@ -53,15 +111,60 @@ namespace ThAmCo.Events.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Date,Duration,TypeId")] Event @event)
+        public async Task<IActionResult> Create([Bind("Id,Title,Date,Duration,TypeId,VenueCode,StaffId")] CreateEventsViewModel @event)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(@event);
+                Event tempEvent = new Event
+                {
+                    Id = @event.Id,
+                    Title = @event.Title,
+                    Date = @event.Date,
+                    Duration = @event.Duration,
+                    TypeId = @event.TypeId,
+                    VenueCode = @event.VenueCode
+                };
+
+                Reservations resdto = new Reservations
+                {
+                    EventDate = @event.Date.Date,
+                    VenueCode = @event.VenueCode,
+                    StaffId = @event.StaffId.ToString()
+                };
+
+                _context.Add(tempEvent);
                 await _context.SaveChangesAsync();
+
+                HttpClient client = new HttpClient();
+                var response = client.PostAsync("http://localhost:23652/api/Reservations", new StringContent(JsonConvert.SerializeObject(resdto), Encoding.UTF8, "application/json"));
+
+                Debug.WriteLine(await response.Result.Content.ReadAsStringAsync());
+
                 return RedirectToAction(nameof(Index));
             }
+
             return View(@event);
+        }
+        public async Task<IEnumerable<Venuedto>> getVenues([FromQuery, MinLength(3), MaxLength(3), Required] string eventCode, [FromQuery, Required] string datePassed)
+        {
+            var eventTypeInfo = new List<Venuedto>().AsEnumerable();
+
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new System.Uri("http://localhost:23652/");
+            client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
+
+            HttpResponseMessage response = await client.GetAsync("api/Availability?eventType=" + eventCode + "&beginDate=" + datePassed + "&endDate=" + datePassed);
+
+            if (response.IsSuccessStatusCode)
+            {
+                eventTypeInfo = await response.Content.ReadAsAsync<IEnumerable<Venuedto>>();
+            }
+            else
+            {
+                throw new Exception();
+            }
+
+            return eventTypeInfo;
         }
 
         // GET: Events/Edit/5
@@ -147,6 +250,19 @@ namespace ThAmCo.Events.Controllers
         private bool EventExists(int id)
         {
             return _context.Events.Any(e => e.Id == id);
+        }
+
+        private class EventsViewModel
+        {
+            public int Id { get; set; }
+            public string Title { get; set; }
+            public DateTime Date { get; set; }
+            public TimeSpan? Duration { get; set; }
+            public string TypeId { get; set; }
+            public List<GuestBooking> Bookings { get; set; }
+            public string TypeValue { get; set; }
+            public string VenueCode { get; set; }
+            public List<StaffBooking> StaffBookings { get; set; }
         }
     }
 }
