@@ -37,57 +37,58 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Duration)
-            </td>
-            <td>
-                @Html.DisplayNameFor(model => model.VenueCode)
-            </td>
-            <td>
-                @Html.DisplayNameFor(model => model.Date)
-            </td>
-            <td>
-                @Html.DisplayNameFor(model => model.Bookings)
-            </td>
-            <td>
-                @Html.DisplayNameFor(model => model.StaffBookings)
-            </td>
-            <th>
-                @Html.DisplayNameFor(model => model.TypeId)
-            </th>
-            <td>
-                <a asp-action="Index" asp-controller="GuestBookings" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Bookings.Count)</a>
-            </td>
-            <td>
-                <a asp-action="Index" asp-controller="StaffBookings" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.StaffBookings.Count)</a>
-            </td>
-            @*<td>
-            @{                                                       
-                bool firstAiders = false;
-                foreach (var staff in item.StaffBookings)
-                {
-                    if (staff.Staff.FirstAider == true)
-                    {
-                        firstAiders = true;
-                    }
-                }
-                if (!firstAiders)
-                {
-                    <span style="color: red"><i class="material-icons">warning</i>There are no first aiders assigned to this event!</span>
-                }
-            }
-        </td>*@
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Duration)
+                </td>
+                <td>
+                    @Html.DisplayNameFor(model => model.VenueCode)
+                </td>
+                <td>
+                    @Html.DisplayNameFor(model => model.Date)
+                </td>
+                <td>
+                    @Html.DisplayNameFor(model => model.Bookings)
+                </td>
+                <td>
+                    @Html.DisplayNameFor(model => model.StaffBookings)
+                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.TypeId)
+                </th>
+                <td>
+                    <a asp-action="Index" asp-controller="GuestBookings" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Bookings.Count)</a>
+                </td>
+                <td>
+                    <a asp-action="Index" asp-controller="StaffBookings" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.StaffBookings.Count)</a>
+                </td>
+                @*<td>
+                        @{
+                            bool firstAiders = false;
+                            foreach (var staff in item.StaffBookings)
+                            {
+                                if (staff.Staff.FirstAider == true)
+                                {
+                                    firstAiders = true;
+                                }
+                            }
+                            if (!firstAiders)
+                            {
+                                <span style="color: red"><i class="material-icons">warning</i>There are no first aiders assigned to this event!</span>
+                            }
+                        }
+                    </td>*@
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

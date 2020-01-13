@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using ThAmCo.Events.Data;
 using ThAmCo.Events.Models;
+using static ThAmCo.Events.Models.EventsViewModel;
 
 namespace ThAmCo.Events.Controllers
 {
@@ -31,16 +32,16 @@ namespace ThAmCo.Events.Controllers
         {
             var eventTypeInfo = new List<EventDto>().AsEnumerable();
 
-            HttpClient client = new HttpClient();
-            client.BaseAddress = new System.Uri("http://localhost:22263/");
-            client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
+            //HttpClient client = new HttpClient();
+            //client.BaseAddress = new System.Uri("http://localhost:22263/");
+            //client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
 
-            HttpResponseMessage response = await client.GetAsync("api/eventtypes");
+            //HttpResponseMessage response = await client.GetAsync("api/eventtypes");
 
-            IQueryable<EventsViewModel> eventGuestsDbContext = _context.Events
+            var events = await _context.Events
                 .Include(g => g.Bookings)
                 .Include(sb => sb.StaffBookings)
-                .Select(g => new EventsViewModel
+                .Select(g => new EventsView
                 {
                     Id = g.Id,
                     Title = g.Title,
@@ -48,12 +49,13 @@ namespace ThAmCo.Events.Controllers
                     Duration = g.Duration,
                     TypeId = g.TypeId,
                     Bookings = g.Bookings,
-                    TypeValue = eventTypeInfo.Where(h => h.id == g.TypeId).Select(n => n.title).FirstOrDefault(),
+                    //TypeValue = eventTypeInfo.Where(h => h.id == g.TypeId).Select(n => n.title).FirstOrDefault(),
+                    TypeValue = "WED",
                     VenueCode = g.VenueCode,
                     StaffBookings = g.StaffBookings
-                });
+                }).ToListAsync();
 
-            return View(await eventGuestsDbContext.ToListAsync());
+            return View(events);
         }
 
         // GET: Events/Details/5
@@ -245,18 +247,6 @@ namespace ThAmCo.Events.Controllers
         {
             return _context.Events.Any(e => e.Id == id);
         }
-
-        private class EventsViewModel
-        {
-            public int Id { get; set; }
-            public string Title { get; set; }
-            public DateTime Date { get; set; }
-            public TimeSpan? Duration { get; set; }
-            public string TypeId { get; set; }
-            public List<GuestBooking> Bookings { get; set; }
-            public string TypeValue { get; set; }
-            public string VenueCode { get; set; }
-            public List<StaffBooking> StaffBookings { get; set; }
-        }
+        
     }
 }

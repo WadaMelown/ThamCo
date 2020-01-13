@@ -15,7 +15,7 @@ namespace ThAmCo.Events.Data
 
         public TimeSpan? Duration { get; set; }
 
-        [Required, Display(Name = "Event Type")]
+        [Required, Display(Name = "Event Type"), MaxLength(3), MinLength(3)]
         public string TypeId { get; set; }
 
         [Display(Name = "Guest Bookings")]
