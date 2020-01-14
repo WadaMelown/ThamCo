@@ -12,6 +12,6 @@ namespace ThAmCo.Events.Data
         [Display(Name = "Event Name")]
         public int EventId { get; set; }
 
-        public Event Event { get; set; }
+        public EventsViewModel Event { get; set; }
     }
 }

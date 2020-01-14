@@ -22,7 +22,16 @@ namespace ThAmCo.Events.Models
         [Required, Display(Name = "Event Type")]
         public string TypeId { get; set; }
 
-        [Required, Display(Name = "Venue Name")]
+        [Display(Name = "Guest Bookings")]
+        public List<GuestBooking> Bookings { get; set; }
+
+        [Display(Name = "Staff Bookings")]
+        public List<StaffBooking> StaffBookings { get; set; }
+
+        [Display(Name = "Event Type")]
+        public string TypeValue { get; set; }
+
+        [Display(Name = "Venue Code")]
         public string VenueCode { get; set; }
 
         [Required(ErrorMessage = "Make sure you have made at least one staff member before trying to create an event!"), Display(Name = "Staff Name")]

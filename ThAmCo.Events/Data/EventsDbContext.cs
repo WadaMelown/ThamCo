@@ -9,7 +9,7 @@ namespace ThAmCo.Events.Data
     public class EventsDbContext : DbContext
     {
         public DbSet<Customer> Customers { get; set; }
-        public DbSet<Event> Events { get; set; }
+        public DbSet<EventsViewModel> Events { get; set; }
         public DbSet<GuestBooking> Guests { get; set; }
 
         public DbSet<StaffInfo> Staff { get; set; }
@@ -49,12 +49,12 @@ namespace ThAmCo.Events.Data
                    .WithOne(b => b.StaffInfo)
                    .HasForeignKey(b => b.StaffId);
 
-            builder.Entity<Event>()
+            builder.Entity<EventsViewModel>()
                     .HasMany(e => e.Bookings)
                     .WithOne(b => b.Event)
                     .HasForeignKey(b => b.EventId);
 
-            builder.Entity<Event>()
+            builder.Entity<EventsViewModel>()
                    .Property(e => e.TypeId)
                    .IsFixedLength();
 
@@ -67,9 +67,9 @@ namespace ThAmCo.Events.Data
                     new Customer { Id = 3, Surname = "Jellybeans", FirstName = "Jin", Email = "jin@example.com" }
                 );
 
-                builder.Entity<Event>().HasData(
-                    new Event { Id = 1, Title = "Bob's Big 50", Date = new DateTime(2016, 4, 12), Duration = new TimeSpan(6, 0, 0), TypeId = "PTY" },
-                    new Event { Id = 2, Title = "Best Wedding Yet", Date = new DateTime(2018, 12, 1), Duration = new TimeSpan(12, 0, 0), TypeId = "WED" }
+                builder.Entity<EventsViewModel>().HasData(
+                    new EventsViewModel { Id = 1, Title = "Bob's Big 50", Date = new DateTime(2016, 4, 12), Duration = new TimeSpan(6, 0, 0), TypeId = "PTY" },
+                    new EventsViewModel { Id = 2, Title = "Best Wedding Yet", Date = new DateTime(2018, 12, 1), Duration = new TimeSpan(12, 0, 0), TypeId = "WED" }
                 );
 
                 builder.Entity<GuestBooking>().HasData(

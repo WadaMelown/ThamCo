@@ -53,7 +53,7 @@ namespace ThAmCo.Events.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FirstName,Surname,Email")] StaffInfo staffInfo)
+        public async Task<IActionResult> Create([Bind("Id,FirstName,Surname,Email,FirstAider")] StaffInfo staffInfo)
         {
             if (ModelState.IsValid)
             {
@@ -85,7 +85,7 @@ namespace ThAmCo.Events.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,Surname,Email")] StaffInfo staffInfo)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,Surname,Email,FirstAider")] StaffInfo staffInfo)
         {
             if (id != staffInfo.Id)
             {

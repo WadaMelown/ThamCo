@@ -19,7 +19,6 @@ namespace ThAmCo.Events.Data
         [Required, DataType(DataType.EmailAddress), Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Display(Name = "Staff Bookings")]
         public List<StaffBooking> StaffBookings{get; set;}
 
         public string fullName()

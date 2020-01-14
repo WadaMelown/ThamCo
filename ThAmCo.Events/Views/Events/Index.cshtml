@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ThAmCo.Events.Data.Event>
+﻿@model IEnumerable<ThAmCo.Events.Models.EventsViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -16,13 +16,16 @@
                 @Html.DisplayNameFor(model => model.Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Duration)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.VenueCode)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Duration)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TypeValue)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Bookings)
@@ -30,65 +33,40 @@
             <th>
                 @Html.DisplayNameFor(model => model.StaffBookings)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TypeId)
-            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Duration)
-                </td>
-                <td>
-                    @Html.DisplayNameFor(model => model.VenueCode)
-                </td>
-                <td>
-                    @Html.DisplayNameFor(model => model.Date)
-                </td>
-                <td>
-                    @Html.DisplayNameFor(model => model.Bookings)
-                </td>
-                <td>
-                    @Html.DisplayNameFor(model => model.StaffBookings)
-                </td>
-                <th>
-                    @Html.DisplayNameFor(model => model.TypeId)
-                </th>
-                <td>
-                    <a asp-action="Index" asp-controller="GuestBookings" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Bookings.Count)</a>
-                </td>
-                <td>
-                    <a asp-action="Index" asp-controller="StaffBookings" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.StaffBookings.Count)</a>
-                </td>
-                @*<td>
-                        @{
-                            bool firstAiders = false;
-                            foreach (var staff in item.StaffBookings)
-                            {
-                                if (staff.Staff.FirstAider == true)
-                                {
-                                    firstAiders = true;
-                                }
-                            }
-                            if (!firstAiders)
-                            {
-                                <span style="color: red"><i class="material-icons">warning</i>There are no first aiders assigned to this event!</span>
-                            }
-                        }
-                    </td>*@
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VenueCode)
+            </td>
+            <td>
+                @Html.DisplayNameFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayNameFor(modelItem => item.Duration)
+            </td>
+            <th>
+                @Html.DisplayNameFor(modelItem => item.TypeValue)
+            </th>
+            <td>
+                <a asp-action="Index" asp-controller="GuestBookings" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Bookings.Count)</a>
+            </td>
+            <td>
+                <a asp-action="Index" asp-controller="StaffBookings" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.StaffBookings.Count)</a>
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+            </td>
+        </tr>
         }
     </tbody>
 </table>

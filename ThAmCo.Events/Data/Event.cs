@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using ThAmCo.Events.Data;
 
 namespace ThAmCo.Events.Data
 {
-    public class Event
+    public class EventsViewModel
     {
         public int Id { get; set; }
 
@@ -26,5 +27,6 @@ namespace ThAmCo.Events.Data
 
         [Display(Name = "Venue Name")]
         public string VenueCode { get; set; }
+
     }
 }

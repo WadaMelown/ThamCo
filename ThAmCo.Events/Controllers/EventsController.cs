@@ -32,16 +32,16 @@ namespace ThAmCo.Events.Controllers
         {
             var eventTypeInfo = new List<EventDto>().AsEnumerable();
 
-            //HttpClient client = new HttpClient();
-            //client.BaseAddress = new System.Uri("http://localhost:22263/");
-            //client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new System.Uri("http://localhost:22263/");
+            client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
 
-            //HttpResponseMessage response = await client.GetAsync("api/eventtypes");
+            HttpResponseMessage response = await client.GetAsync("api/eventtypes");
 
             var events = await _context.Events
                 .Include(g => g.Bookings)
                 .Include(sb => sb.StaffBookings)
-                .Select(g => new EventsView
+                .Select(g => new Models.EventsViewModel
                 {
                     Id = g.Id,
                     Title = g.Title,
@@ -111,7 +111,7 @@ namespace ThAmCo.Events.Controllers
         {
             if (ModelState.IsValid)
             {
-                Event tempEvent = new Event
+                Models.EventsViewModel tempEvent = new Models.EventsViewModel
                 {
                     Id = @event.Id,
                     Title = @event.Title,
@@ -184,7 +184,7 @@ namespace ThAmCo.Events.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Date,Duration,TypeId")] Event @event)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Date,Duration,TypeId")] Models.EventsViewModel @event)
         {
             if (id != @event.Id)
             {

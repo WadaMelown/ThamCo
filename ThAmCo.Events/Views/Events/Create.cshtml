@@ -1,4 +1,4 @@
-﻿@model ThAmCo.Events.Data.Event
+﻿@model ThAmCo.Events.Models.CreateEventsViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -29,8 +29,20 @@
             </div>
             <div class="form-group">
                 <label asp-for="TypeId" class="control-label"></label>
-                <input asp-for="TypeId" class="form-control" />
+                <select asp-for="TypeId" class="form-control" asp-items="ViewBag.TypeId" onchange="TypeChange()" id="selectType">
+                    <option value="" disabled selected hidden>Please select an event type.</option>
+                </select>
                 <span asp-validation-for="TypeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="VenueCode" class="control-label"></label>
+                <select asp-for="VenueCode" class="form-control" id="venueCode" disabled></select>
+                <span asp-validation-for="VenueCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StaffId" class="control-label"></label>
+                <select asp-for="StaffId" class="form-control" asp-items="ViewBag.StaffId"></select>
+                <span asp-validation-for="StaffId" class="text-danger">You need to create a staff member before trying to create an event!</span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
@@ -45,5 +57,26 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-
+    
+    <script type="text/javascript">
+        function TypeChange() {
+            var selectedType = document.getElementById('selectType').value;
+            var selectedDate = document.getElementById('inputDate').value.substring(0, document.getElementById('inputDate').value.indexOf('T')).replace(/-/g, '/');
+            $.ajax({
+                url: "getVenues?eventCode=" + selectedType + "&datePassed=" + selectedDate,
+                method: "GET",
+                success: function (response) {
+                    var options = '';
+                    for (var i = 0; i < response.length; i++) {
+                        options += '<option value="' + response[i].code + '">' + response[i].name + '</option>';
+                    }
+                    document.getElementById('venueCode').innerHTML = options;
+                },
+                error: function () {
+                    alert("Data was not retrieved successfully.");
+                }
+            });
+            $('#venueCode').prop('disabled', false);
+        }
+    </script>
 }
