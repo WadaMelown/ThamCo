@@ -36,5 +36,6 @@ namespace ThAmCo.Events.Models
 
         [Required(ErrorMessage = "Make sure you have made at least one staff member before trying to create an event!"), Display(Name = "Staff Name")]
         public int StaffId { get; set; }
+
     }
 }
