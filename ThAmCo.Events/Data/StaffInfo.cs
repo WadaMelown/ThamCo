@@ -20,7 +20,6 @@ namespace ThAmCo.Events.Data
         [Required, DataType(DataType.EmailAddress), Display(Name = "Email")]
         public string Email { get; set; }
 
-        [ForeignKey("FirstAider")]
         public bool FirstAider { get; set; }
         public List<StaffBooking> StaffBookings{get; set;}
 

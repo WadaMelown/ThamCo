@@ -18,6 +18,5 @@ namespace ThAmCo.Events.Data
 
         public bool Attended { get; set; }
 
-        public StaffBooking FirstAider { get; set; }
     }
 }
