@@ -57,26 +57,5 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    
-    <script type="text/javascript">
-        function TypeChange() {
-            var selectedType = document.getElementById('selectType').value;
-            var selectedDate = document.getElementById('inputDate').value.substring(0, document.getElementById('inputDate').value.indexOf('T')).replace(/-/g, '/');
-            $.ajax({
-                url: "getVenues?eventCode=" + selectedType + "&datePassed=" + selectedDate,
-                method: "GET",
-                success: function (response) {
-                    var options = '';
-                    for (var i = 0; i < response.length; i++) {
-                        options += '<option value="' + response[i].code + '">' + response[i].name + '</option>';
-                    }
-                    document.getElementById('venueCode').innerHTML = options;
-                },
-                error: function () {
-                    alert("Data was not retrieved successfully.");
-                }
-            });
-            $('#venueCode').prop('disabled', false);
-        }
-    </script>
+
 }

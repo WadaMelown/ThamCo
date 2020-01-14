@@ -49,8 +49,7 @@ namespace ThAmCo.Events.Controllers
                     Duration = g.Duration,
                     TypeId = g.TypeId,
                     Bookings = g.Bookings,
-                    //TypeValue = eventTypeInfo.Where(h => h.id == g.TypeId).Select(n => n.title).FirstOrDefault(),
-                    TypeValue = "WED",
+                    TypeValue = eventTypeInfo.Where(h => h.id == g.TypeId).Select(n => n.title).FirstOrDefault(),
                     VenueCode = g.VenueCode,
                     StaffBookings = g.StaffBookings
                 }).ToListAsync();
@@ -87,18 +86,18 @@ namespace ThAmCo.Events.Controllers
 
             HttpResponseMessage response = await client.GetAsync("api/eventtypes");
 
-            if (response.IsSuccessStatusCode)
-            {
-                eventTypeInfo = await response.Content.ReadAsAsync<IEnumerable<EventDto>>();
-            }
-            else
-            {
-                throw new Exception();
-            }
+           // if (response.IsSuccessStatusCode)
+            //{
+               // eventTypeInfo = await response.Content.ReadAsAsync<IEnumerable<EventDto>>();
+           // }
+          // else
+            //{
+           //     throw new Exception();
+           // }
 
-            ViewData["TypeId"] = new SelectList(eventTypeInfo.ToList(), "id", "title", eventTypeInfo.Select(h => h.id == "CON"));
-            ViewData["StaffId"] = new SelectList((from s in _context.Staff
-                                                  select new { Id = s.Id, FullName = s.FirstName + " " + s.Surname }), "Id","FullName");
+           // ViewData["TypeId"] = new SelectList(eventTypeInfo.ToList(), "id", "title", eventTypeInfo.Select(h => h.id == "CON"));
+            //ViewData["StaffId"] = new SelectList((from s in _context.Staff
+                                                  //select new { Id = s.Id, FullName = s.FirstName + " " + s.Surname }), "Id","FullName");
             return View();
         }
 

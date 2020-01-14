@@ -17,5 +17,7 @@ namespace ThAmCo.Events.Data
         public EventsViewModel Event { get; set; }
 
         public bool Attended { get; set; }
+
+        public StaffBooking FirstAider { get; set; }
     }
 }

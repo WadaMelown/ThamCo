@@ -26,5 +26,7 @@ namespace ThAmCo.Events.Models
 
         public string VenueCode { get; set; }
 
+
+
     }
 }

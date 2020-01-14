@@ -25,7 +25,7 @@
                 @Html.DisplayNameFor(model => model.Duration)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TypeValue)
+                @Html.DisplayNameFor(model => model.TypeId)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Bookings)
@@ -53,7 +53,7 @@
                 @Html.DisplayNameFor(modelItem => item.Duration)
             </td>
             <th>
-                @Html.DisplayNameFor(modelItem => item.TypeValue)
+                @Html.DisplayNameFor(modelItem => item.TypeId)
             </th>
             <td>
                 <a asp-action="Index" asp-controller="GuestBookings" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Bookings.Count)</a>
@@ -61,6 +61,22 @@
             <td>
                 <a asp-action="Index" asp-controller="StaffBookings" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.StaffBookings.Count)</a>
             </td>
+            @*@<td>
+            @{                                                         
+                bool firstAiders = false;
+                foreach (var staffBookings)
+                {
+                    if staff.Staff.FirstAider == true)
+                    {
+                        firstAiders = true;
+                    }
+                }
+                if (!firstAiders)
+                {
+                    <span style="color: red"><i class="material-icons">warning</i>There are no first aiders assigned to this event!</span>
+                }
+            }
+        </td>*@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |

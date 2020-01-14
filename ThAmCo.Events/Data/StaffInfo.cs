@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,6 +20,8 @@ namespace ThAmCo.Events.Data
         [Required, DataType(DataType.EmailAddress), Display(Name = "Email")]
         public string Email { get; set; }
 
+        [ForeignKey("FirstAider")]
+        public bool FirstAider { get; set; }
         public List<StaffBooking> StaffBookings{get; set;}
 
         public string fullName()

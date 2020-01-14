@@ -25,7 +25,7 @@ namespace ThAmCo.Events.Data
         [Display(Name = "Staff Bookings")]
         public List<StaffBooking> StaffBookings { get; set; }
 
-        [Display(Name = "Venue Name")]
+        [Display(Name = "Venue Code")]
         public string VenueCode { get; set; }
 
     }

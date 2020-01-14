@@ -37,6 +37,7 @@ namespace ThAmCo.Events.Controllers
             var staffBooking = await _context.StaffBooking
                 .Include(s => s.Event)
                 .Include(s => s.StaffInfo)
+                .Include(e => e.EventId == id)
                 .FirstOrDefaultAsync(m => m.StaffId == id);
             if (staffBooking == null)
             {
@@ -56,18 +57,24 @@ namespace ThAmCo.Events.Controllers
         }
 
         // POST: StaffBookings/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("StaffId,EventId")] StaffBooking staffBooking)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(staffBooking);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (!StaffBookingExists(staffBooking.StaffId, staffBooking.EventId))
+                {
+                    _context.Add(staffBooking);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    Debug.WriteLine("Guest Booking already Exists");
+                }
             }
+
             ViewData["EventId"] = new SelectList(_context.Events, "Id", "Title", staffBooking.EventId);
             ViewData["StaffId"] = new SelectList(_context.Staff, "Id", "Email", staffBooking.StaffId);
             return View(staffBooking);
@@ -114,7 +121,7 @@ namespace ThAmCo.Events.Controllers
                 }
             }
             ViewData["StaffId"] = new SelectList(from s in _context.Staff
-                     select new{ Id = s.Id, FullName = s.FirstName + " " + s.Surname}, "Id", "FullName", staffBooking.StaffId);
+                                                 select new { Id = s.Id, FullName = s.FirstName + " " + s.Surname }, "Id", "FullName", staffBooking.StaffId);
             ViewData["EventId"] = new SelectList(_context.Events, "Id", "Title", staffBooking.EventId);
             return View(staffBooking);
         }
